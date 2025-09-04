@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Gardenia Snack Bar - Menu Digjitale</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #e67e22;
+      --accent-color: #f1c40f;
+      --text-color: #333;
+      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+      --footer-bg: #1a252f;
+      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    body {
+      background-color: #f5f6fa;
+      line-height: 1.6;
+      padding-bottom: var(--safe-area-inset-bottom);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    /* HEADER */
+    .header {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                  url('https://bijin.plus/wp-content/uploads/2023/12/a-cup-of-coffee-on-a-table-in-front-of-a-street-with-a-city-lights-in-the-background-min-scaled.jpg') center/cover no-repeat;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .logo {
+      width: clamp(120px, 25vw, 200px);
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+    }
+    
+    .header h1 {
+      font-size: clamp(2rem, 6vw, 4rem);
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+    
+    .header p {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+    }
+    
+    /* NAVIGACIONI */
+    .nav {
+      position: sticky;
+      top: 0;
+      background: var(--primary-color);
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      padding: 0.5rem 0;
+    }
+    
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      position: relative;
+    }
+    
+    .current-section {
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 0 1rem;
+      opacity: 1;
+      transition: all 0.3s ease;
+      min-width: 120px;
+      text-align: center;
+    }
+    
+    .nav-list {
+      display: flex;
+      list-style: none;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 0.7rem 1.2rem;
+      border-radius: 2rem;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-link.active {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    /* Search Bar Styles */
+    .search-container {
+      position: relative;
+      margin-left: 1rem;
+    }
+    
+    .search-input {
+      padding: 0.7rem 1.2rem;
+      padding-left: 2.5rem;
+      border-radius: 2rem;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      width: 200px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+    
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .search-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      width: 250px;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1001;
+    }
+    
+    .search-results.active {
+      display: block;
+    }
+    
+    .search-result-item {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s;
+    }
+    
+    .search-result-item:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .search-result-image {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    
+    .search-result-info {
+      flex: 1;
+    }
+    
+    .search-result-name {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .search-result-category {
+      font-size: 0.8rem;
+      color: #888;
+    }
+    
+    .search-result-price {
+      color: var(--secondary-color);
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    .no-results {
+      padding: 1rem;
+      text-align: center;
+      color: #888;
+    }
+    
+    /* MENU */
+    .menu-section {
+      padding: 5rem 1rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: block;
+      position: relative;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 3rem;
+      color: var(--primary-color);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.5s ease-out;
+    }
+    
+    .section-title.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: 2rem;
+      padding: 0 1rem;
+    }
+    
+    .menu-item {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    
+    .menu-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.5s ease 0.1s;
+    }
+    
+    .item-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-bottom: 3px solid var(--secondary-color);
+      transition: transform 0.3s ease;
+    }
+    
+    .menu-item:hover .item-image {
+      transform: scale(1.05);
+    }
+    
+    .item-info {
+      padding: 1.5rem;
+    }
+    
+    .item-title {
+      font-size: 1.3rem;
+      color: var(--primary-color);
+      margin-bottom: 0.8rem;
+    }
+    
+    .item-description {
+      color: #666;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    
+    .item-price {
+      color: var(--secondary-color);
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    
+    /* Highlight effect for searched items */
+    .menu-item.highlighted {
+      animation: highlight 2s ease;
+      box-shadow: 0 0 0 3px var(--accent-color);
+    }
+    
+    @keyframes highlight {
+      0% { box-shadow: 0 0 0 0 var(--accent-color); }
+      50% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0.3); }
+      100% { box-shadow: 0 0 0 3px var(--accent-color); }
+    }
+    
+    /* Progress indicator */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(0,0,0,0.1);
+      z-index: 1001;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--accent-color);
+      width: 0%;
+      transition: width 0.2s ease-out;
+    }
+    
+    /* Floating back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-5px) scale(1.1);
+      background: var(--secondary-color);
+    }
+    
+    /* Scroll snapping on mobile */
+    @media (max-width: 768px) {
+      main {
+        scroll-snap-type: y proximity;
+      }
+      
+      .menu-section {
+        scroll-snap-align: start;
+      }
+      
+      .nav-container {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .current-section {
+        font-size: 1.1rem;
+        padding: 0.5rem 0;
+        min-width: auto;
+      }
+      
+      .nav-list {
+        width: 100%;
+        overflow-x: auto;
+        justify-content: center;
+        padding: 0.5rem 0;
+        scrollbar-width: thin;
+      }
+      
+      .nav-list::-webkit-scrollbar {
+        height: 5px;
+      }
+      
+      .nav-list::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 10px;
+      }
+      
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section-title {
+        margin-bottom: 2rem;
+      }
+      
+      .search-container {
+        margin: 0.5rem 0;
+        width: 100%;
+      }
+      
+      .search-input {
+        width: 100%;
+      }
+      
+      .search-input:focus {
+        width: 100%;
+      }
+    }
+    
+    /* FOOTER */
+    footer {
+      background-color: var(--footer-bg);
+      color: white;
+      padding: 3rem 1rem;
+      margin-top: 4rem;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section {
+      padding: 1rem;
+    }
+    
+    .footer-title {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent-color);
+    }
+    
+    .footer-logo {
+      width: 150px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-about p {
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+      color: #bbb;
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .contact-icon {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .contact-text {
+      color: #bbb;
+    }
+    
+    .contact-text strong {
+      color: white;
+      display: block;
+      margin-bottom: 3px;
+    }
+    
+    .hours-list {
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+    
+    .hours-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: #bbb;
+    }
+    
+    .hours-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 1.5rem;
+    }
+    
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #bbb;
+      font-size: 0.9rem;
+    }
+    
+    .map-container {
+      height: 200px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+      background: url('https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-l+cfa61d(19.8190,41.3275)/19.8190,41.3275,14,0/300x200?access_token=pk.eyJ1IjoiZGV2c2FtcGxlIiwiYSI6ImNqenY5eTl1dTAxZ2kzY3F0M2k0bWtqd2gifQ.LrFZgwSwq5XPAJ3kSotm7A') center/cover no-repeat;
+    }
+    
+    @media (max-width: 768px) {
+      .header {
+        height: auto;
+        min-height: 70vh;
+      }
+      
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-section {
+        padding: 1rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Progress indicator -->
+  <div class="progress-container">
+    <div class="progress-bar"></div>
+  </div>
+  
+  <!-- Back to top button -->
+  <div class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+  
+  <header class="header">
+    <img src="https://i.postimg.cc/zGqK4Mhr/gardenia.png" alt="Gardenia Logo" class="logo">
+    <h1>Gardenia</h1>
+    <p>Snack Bar</p>
+  </header>
+  
+  <nav class="nav">
+    <div class="nav-container">
+      <div class="current-section">Kafe</div>
+      <ul class="nav-list">
+        <li><a href="#kafe" class="nav-link active" data-category="kafe">Kafe</a></li>
+        <li><a href="#pije-freskuese" class="nav-link" data-category="pije-freskuese">Freskuese</a></li>
+        <li><a href="#pije-alkolike" class="nav-link" data-category="pije-alkolike">Alkolike</a></li>
+        <li><a href="#brunch" class="nav-link" data-category="brunch">Brunch</a></li>
+        <li><a href="#lunch" class="nav-link" data-category="lunch">Lunch</a></li>
+      </ul>
+      
+      <!-- Search Bar -->
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="search-input" class="search-input" placeholder="Kërko produktet...">
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </div>
+  </nav>
+  
+  <main>
+    <section id="kafe" class="menu-section">
+      <h2 class="section-title visible">Kafe</h2>
+      <div class="menu-grid"></div>
+    </section>
+    <section id="pije-freskuese" class="menu-section">
+      <h2 class="section-title">Pije Freskuese</h2>
+      <div class="menu-grid"></div>
+    </section>
+    <section id="pije-alkolike" class="menu-section">
+      <h2 class="section-title">Pije Alkolike</h2>
+      <div class="menu-grid"></div>
+    </section>
+    <section id="brunch" class="menu-section">
+      <h2 class="section-title">Brunch</h2>
+      <div class="menu-grid"></div>
+    </section>
+    <section id="lunch" class="menu-section">
+      <h2 class="section-title">Lunch</h2>
+      <div class="menu-grid"></div>
+    </section>
+  </main>
+  
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section footer-about">
+        <img src="https://i.postimg.cc/zGqK4Mhr/gardenia.png" alt="Gardenia Logo" class="footer-logo">
+        <p>Gardenia Snack Bar është një destinacion i preferuar për klientët tanë, ku ofrojmë ushqime dhe pije cilësore në një ambient të rehatshëm dhe miqësor.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-section">
+        <h3 class="footer-title">Kontakti</h3>
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-text">
+              <strong>Adresa</strong>
+              <span>Rruga e Elbasanit, Tirana, Albania</span>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-text">
+              <strong>Telefoni</strong>
+              <span>+355 69 123 4567</span>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text">
+              <strong>Email</strong>
+              <span>info@gardeniasnackbar.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-section">
+        <h3 class="footer-title">Oraret</h3>
+        <ul class="hours-list">
+         <h3 class="footer-title">Orari i Sherbimit</h3>    
+            <li><span>E Hënë - E Dielë:</span> <span>8:00 - 00:00</span></li>
+         <h3 class="footer-title">Orari i Brunch</h3>       
+            <li><span>E Hënë - E Dielë:</span> <span>8:30 - 12:30 </span></li>
+         <h3 class="footer-title">Orari i Lunch</h3>       
+            <li><span>E Hënë - E Dielë:</span> <span>12:30 - 16:00 </span></li>
+        </ul>
+        
+        <div class="map-container"></div>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      &copy; <span id="current-year">2023</span> Gardenia Snack Bar. Të gjitha të drejtat e rezervuara.
+    </div>
+  </footer>
+  
+  <script>
+    const menuItems = {
+      "kafe": [
+        {
+          name: "Kafe",
+          price: "80 Lekë",
+          image: "https://media.barchart.com/contributors-admin/common-images/images/Soft%20Commodities/Coffee/shutterstock_1728806332.jpg",
+          description: "Kafe e fortë me shije të pasur"
+        },   
+        {
+          name: "Cappuccino",
+          price: "160 Lekë",
+          image: "https://www.clarin.com/img/2022/03/01/ceq4FUBv9_2000x1500__1.jpg",
+          description: "Cappuccino me qumësht të përhimë"
+        },
+        {
+          name: "Cappuccino me Shije",
+          price: "210 Lekë",
+          image: "https://png.pngtree.com/thumb_back/fw800/background/20241018/pngtree-a-tall-glass-of-iced-coffee-with-whipped-cream-and-caramel-image_16360173.jpg",
+          description: "Cappuccino me qumësht me shije te ndryshme"
+        },
+        {
+          name: "Makiato",
+          price: "80 Lekë",
+          image: "https://www.beanpoet.com/wp-content/uploads/2020/10/stumptown-macchiato.jpg",
+          description: "Makiato me qumësht të ngrohtë/ftohte"
+        },
+        {
+          name: "Babychino",
+          price: "70 Lekë",
+          image: "https://perfectdailygrind.com/wp-content/uploads/2022/08/babyccino.jpg",
+          description: "Babychino – qumësht i ngrohtë dhe i shkumëzuar, pa kafeinë, i servuar në filxhan të vogël, ideal për fëmijë."
+        },
+        {
+          name: "Kakao",
+          price: "160 Lekë",
+          image: "https://www.drweil.com/wp-content/uploads/2016/12/diet-nutrition_nutrition_drink-cocoa-daily_2716x1810_000023297992.jpg",
+          description: "Kakao e ngrohtë me shije të pasur"
+        },
+        {
+          name: "Kakao e ftohte",
+          price: "200 Lekë",
+          image: "https://png.pngtree.com/thumb_back/fw800/background/20240605/pngtree-cold-or-iced-chocolate-drink-with-milk-foam-refreshing-drink-image_15740763.jpg",
+          description: "Kakao e ftohte me shije të pasur"
+        },
+        {
+          name: "Frape",
+          price: "170 Lekë",
+          image: "https://frios.com.mx/wp-content/uploads/2023/04/FRAPPE-MOKA-AMARETTO.jpg",
+          description: "Kafe e ftohtë e shkumëzuar, e freskët dhe energjike. Ideale për ditët e nxehta dhe momente relaksi"
+        },
+        {
+          name: "Cokollatë e Nxehtë",
+          price: "190 Lekë",
+          image: "https://images.alphacoders.com/877/877310.jpg",
+          description: "Cokollatë bardhe/zeze me shije të pasur dhe aromë të thellë"
+        },
+        {
+          name: "Cokollate e ftohtë",
+          price: "220 Lekë",
+          image: "https://campcochocolates.com/wp-content/uploads/2019/10/coldcoffee-1200x800.jpg",
+          description: "Cokollatë e ftohtë e freskët, e shijshme dhe e ëmbël"
+        },
+        {
+          name: "Iced Coffee",
+          price: "180 Lekë",
+          image: "https://cdn.pixabay.com/photo/2021/12/17/09/13/iced-coffee-6876063_1280.jpg",
+          description: "Kafe e shijshme e shoqëruar me kube akulli,"
+        },
+        {
+          name: "Salep",
+          price: "170 Lekë",
+          image: "https://cdn.pixabay.com/photo/2021/02/15/07/35/salep-6016909_1280.jpg",
+          description: "ije tradicionale e ngrohtë, e trashë dhe aromatike, me shije delikate dhe kanellë sipër."
+        },
+        {
+          name: "Americano",
+          price: "110 Lekë",
+          image: "https://cdn.pixabay.com/photo/2015/07/13/14/58/coffee-843278_1280.jpg",
+          description: "Americano me ujë të nxehtë dhe espresso"
+        },
+        {
+          name: "Kafe Decafeinato",
+          price: "170 Lekë",
+          image: "https://cdn.pixabay.com/photo/2019/06/23/19/25/coffee-4294508_640.jpg",
+          description: "Aromë e plotë kafeje, pa kafeinë."
+        },
+        {
+          name: "Correto",
+          price: "160 Lekë",
+          image: "https://tse2.mm.bing.net/th/id/OIP.YaNvr4OmUYiQQC-lzIqGFAHaE6?pid=Api&P=0&h=180",
+          description: "Korreto me espresso dhe qumësht të ngrohtë"
+        },
+        {
+          name: "Fredo Kapuciono",
+          price: "210 Lekë",
+          image: "https://cdn.pixabay.com/photo/2019/01/14/17/56/coffee-3932649_1280.jpg",
+          description: "Ekspres i ftohtë mbi akull, i mbuluar me shkumë kremoze qumështi."
+        },
+        {
+          name: "Caj Bio",
+          price: "150 Lekë",
+          image: "https://cdn.pixabay.com/photo/2015/01/13/16/08/tee-598346_640.jpg",
+          description: "100% natyral, i përzgjedhur me kujdes nga bimë organike."
+        },
+        {
+          name: "Caj me bustine",
+          price: "90 Lekë",
+          image: "https://cdn.pixabay.com/photo/2016/10/14/18/21/tee-1740871_640.jpg",
+          description: "Praktik, i shpejtë dhe plot aromë."
+        },
+        {
+          name: "Caj Turk",
+          price: "100 Lekë",
+          image: "https://cdn.pixabay.com/photo/2018/12/18/23/41/tea-3883287_640.jpg",
+          description: "Praktik, i shpejtë dhe plot aromë dhe shije te ndryshme."
+        },
+        {
+          name: "Frape me Shije",
+          price: "240 Lekë",
+          image: "https://cdn.pixabay.com/photo/2020/03/07/05/18/beverage-4908765_640.jpg",
+          description: "Freski dhe kremozitet i frapé-së klasik, i kombinuar me aromë unike për një eksperiencë të këndshme."
+        },
+        {
+          name: "Correto Decafeinato",
+          price: "170 Lekë",
+          image: "https://tse2.mm.bing.net/th/id/OIP.1KxSuRWforA6TVHlB2xDWgAAAA?pid=Api&P=0&h=180",
+          description: "Kafe pa kafeinë, e shijshme dhe e fortë, me një prekje të rafinuar likeri për një eksperiencë të veçantë."
+        },
+        {
+          name: "Doppio Kafe",
+          price: "180 Lekë",
+          image: "https://i.pinimg.com/736x/4d/04/60/4d0460cfee74fc96d85488e7e3513103.jpg",
+          description: "Dy doza ekspres për një shije intensive dhe energji të dyfishtë në çdo filxhan."
+        },
+        {
+          name: "Doppio  Decafeinato",
+          price: "210 Lekë",
+          image: "https://www.starbucks.com.hk/media/catalog/product/e/s/espresso_doppio.jpg",
+          description: "Dy doza kafeje pa kafeinë, me shije intensive dhe aromë të pasur."
+        }
+      ],
+      "pije-freskuese": [
+        {
+          name: "Fanta",
+          price: "180 Lekë",
+          image: "https://facts.net/wp-content/uploads/2023/06/Fanta-can.jpeg",
+          description: "Fanta me shije te ndryshme"
+        },
+        {
+          name: "Leng frutash",
+          price: "270 Lekë",
+          image: "https://cdn.pixabay.com/photo/2019/03/28/17/36/juice-4087614_640.jpg",
+          description: "Leng i llojeve të ndryshme frutash"
+        },
+        {
+          name: "Leng frutash mix",
+          price: "320 Lekë",
+          image: "https://cdn.pixabay.com/photo/2023/05/31/11/14/smoothie-8031132_1280.jpg",
+          description: "Përzierje frutash të ndryshme"
+        },
+        {
+          name: "Leng shege",
+          price: "350 Lekë",
+          image: "https://tse2.mm.bing.net/th/id/OIP.Q2LcXRtyeTObsYEj80w80wHaEK?pid=Api&P=0&h=180",
+          description: "Leng i freskët shege"
+        },
+        {
+          name: "Rose lemonade",
+          price: "470 Lekë",
+          image: "https://www.fentimans.com/cdn/shop/files/fentimans_rose-lemonade.jpg?v=1681507048&width=3840",
+          description: "Limonatë me aromë trëndafili"
+        },
+        {
+          name: "Bitter",
+          price: "150 Lekë",
+          image: "https://www.bittersalfa.it/wp-content/uploads/2019/10/sodate-100ml.png",
+          description: "Pije bitter freskuese"
+        },
+        {
+          name: "Caj i ftohte jeshil",
+          price: "150 Lekë",
+          image: "https://someg.al/wp-content/uploads/2019/08/k1-min-1.jpg",
+          description: "Çaj i ftohtë i gjelbër"
+        },
+        {
+          name: "Caj i ftohte pjeshke",
+          price: "180 Lekë",
+          image: "https://img.freepik.com/premium-photo/default-cold-peach-ginger-tea_1114710-113604.jpg",
+          description: "Çaj i ftohtë pjeshke"
+        },
+        {
+          name: "Uje natyral",
+          price: "80 Lekë",
+          image: "https://lajthiza.al/wp-content/uploads/2022/10/insta3.jpg",
+          description: "Ujë i pastër i burimit"
+        },
+        {
+          name: "Uje me gaz",
+          price: "80 Lekë",
+          image: "https://kohajone.com/wp-content/uploads/2024/02/Capture-34.png",
+          description: "Ujë i gazuar i freskët"
+        },
+        {
+          name: "Bravo",
+          price: "190 Lekë",
+          image: "http://www.yasarhalim.com/images/thumbs/0024359_bravo-strawberry-drink-250ml.jpeg",
+          description: "Pije freskuese Bravo me shije te ndryshme"
+        },
+        {
+          name: "Ama kapucino",
+          price: "180 Lekë",
+          image: "https://m.media-amazon.com/images/I/81re1YV11bL._SL1500_.jpg",
+          description: "Kapuçino i ftohtë"
+        },
+        {
+          name: "Ama makiato",
+          price: "180 Lekë",
+          image: "https://pacomarket.ro/wp-content/uploads/2023/12/product_90169540_0.jpg",
+          description: "Makiato i ftohtë"
+        },
+        {
+          name: "IVI",
+          price: "180 Lekë",
+          image: "http://www.yasarhalim.com/images/thumbs/0024164_ivi-lemon-fizzy-drink_360.jpeg",
+          description: "Pije IVI freskuese"
+        },
+        {
+          name: "Lemon soda",
+          price: "180 Lekë",
+          image: "https://www.nifeislife.com/873-large_default/lemonsoda-33cl.jpg",
+          description: "Soda me limon"
+        },
+        {
+          name: "Orange soda",
+          price: "180 Lekë",
+          image: "https://img.freepik.com/premium-photo/liquid-orange-soda-drink-splash_87720-33981.jpg?w=2000",
+          description: "Soda me portokall"
+        },
+        {
+          name: "B52",
+          price: "180 Lekë",
+          image: "https://www.balkaniamo.it/wp-content/uploads/00142-000-141-2.jpg",
+          description: "Pije energjitike B52"
+        },
+        {
+          name: "Coca Cola",
+          price: "180 Lekë",
+          image: "https://cdn.pixabay.com/photo/2014/09/26/19/51/drink-462776_1280.jpg",
+          description: "Pije energjitike Red Bull"
+        },
+        {
+          name: "Red Bull",
+          price: "250 Lekë",
+          image: "https://i.pinimg.com/originals/87/ce/22/87ce223270626da2cdfd35d79a6b4ddc.jpg",
+          description: "Coca Cola klasike"
+        },
+        {
+          name: "Sprite",
+          price: "180 Lekë",
+          image: "https://www.the-sun.com/wp-content/uploads/sites/6/2024/05/sprite-black-background-covered-waterdrops-902360960.jpg?strip=all&w=960",
+          description: "Sprite freskuese"
+        },
+        {
+          name: "Crodino",
+          price: "160 Lekë",
+          image: "https://www.abrandnewday.nl/wp-content/uploads/2017/04/CRODINO-Perfect-Serves-1024x1018.png",
+          description: "Aperitiv Crodino"
+        },
+        {
+          name: "Milkshake",
+          price: "240 Lekë",
+          image: "https://preppykitchen.com/wp-content/uploads/2021/04/Milkshake-Recipe-Card.jpg",
+          description: "Milkshake kremoze"
+        }
+      ],
+      "pije-alkolike": [
+        {
+          name: "Birra Korca",
+          price: "200 Lekë",
+          image: "https://pikaproduction.com/wp-content/uploads/2014/07/biira-ne-3d.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Corona",
+          price: "300 Lekë",
+          image: "https://images.pexels.com/photos/15901846/pexels-photo-15901846.jpeg?cs=srgb&dl=pexels-raynnier-gomez-15901846.jpg&fm=jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Heineken",
+          price: "250 Lekë",
+          image: "https://i.pinimg.com/originals/a8/26/f7/a826f7fcc4d2006c5a52483e445178be.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Moretti",
+          price: "250 Lekë",
+          image: "https://couchmagpie.files.wordpress.com/2022/08/bm-zero.png",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Kriko e Vogel",
+          price: "200 Lekë",
+          image: "https://static.vecteezy.com/system/resources/thumbnails/027/888/870/small_2x/draught-beer-craft-in-glasses-on-gold-background-generative-ai-photo.jpeg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Kriko e Madhe",
+          price: "300 Lekë",
+          image: "https://www.unknownbrewing.com/wp-content/uploads/2022/11/What-is-Draft-Beer-1536x1026.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Leffe",
+          price: "450 Lekë",
+          image: "https://i.pinimg.com/originals/71/fd/01/71fd01ceb0e11ebc575a3a3c9b40428d.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Paulaner i Turbullt",
+          price: "400 Lekë",
+          image: "https://bunji.es/wp-content/uploads/2023/04/paulaner-1.png",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Paulaner Kristal",
+          price: "350 Lekë",
+          image: "https://s13emagst.akamaized.net/products/53311/53310902/media/res_48eeae7a1c873ab11ef2b23fac63ddd0.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Birra Peja",
+          price: "200 Lekë",
+          image: "http://thg-shpk.com/sites/default/files/peja3_0.png",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Peroni i Vogel",
+          price: "250 Lekë",
+          image: "https://theshout.com.au/wp-content/uploads/2019/04/Peroni.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        }, 
+        {
+          name: "Stella Artois",
+          price: "300 Lekë",
+          image: "https://www.unknownbrewing.com/wp-content/uploads/2022/11/Stella-Beers-Worldwide-Popularity.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        },
+        {
+          name: "Tuborg",
+          price: "250 Lekë",
+          image: "https://media.yeah1.com/files/thuong.nth/2023/07/14/h3-140914.jpg",
+          description: "E freskët, e artë dhe e gazuar, shoqëruesja perfekte për momente relaksi dhe shoqërie."
+        },
+        {
+          name: "Cocteil Klasik",
+          price: "550 Lekë",
+          image: "https://tse1.mm.bing.net/th/id/OIP.hkDZk6eoVgbjQGf0JdCu2wHaE8?pid=Api&P=0&h=180",
+          description: "Pije e freskët dhe energjike me shije të veçantë"
+        },  
+        {
+          name: "Cocteil Analkolik",
+          price: "400 Lekë",
+          image: "https://img.freepik.com/premium-photo/great-alcoholic-cocktail-close-up_252187-15634.jpg",
+          description: "Pije e freskët pa alkool me shije të veçantë"
+        },
+        {
+          name: "AMF",
+          price: "600 Lekë",
+          image: "https://assets-global.website-files.com/63f8012ca7d5b6ca7f9a5a29/65a886fa5f0484cda81b493b_amf%20drink.jpg",
+          description: "Pije energjike me shije unike"
+        },
+        {
+          name: "Espresso Martini",
+          price: "600 Lekë",
+          image: "https://media.kaufland.com/images/PPIM/AP_Content_2708/std.lang.all/72/97/Asset_817297.jpg",
+          description: "Kombinim i shijshëm i kafesë dhe alkoolit"
+        },
+        {
+          name: "Gin Shege",
+          price: "700 Lekë",
+          image: "https://fiftypoundsgin.london/wp-content/uploads/Pomegranate--1024x1024.jpg",
+          description: "Gin me shije të freskëta shege"
+        },
+        {
+          name: "Vodka Sour",
+          price: "700 Lekë",
+          image: "https://grapevine.se/wp-content/uploads/2023/10/vodka_sour-1.png",
+          description: "Vodka me shije të thartë dhe të ëmbël"
+        },
+        {
+          name: "Hugo Spritz",
+          price: "550 Lekë",
+          image: "https://www.livetsgoda.se/wp-content/uploads/2022/07/Hugo-Spritz-1-800x902.jpg",
+          description: "Pije e freskët me elderflower dhe prošek"
+        },
+        {
+          name: "Aperol Spritz",
+          price: "550 Lekë",
+          image: "https://www.aperol.com/app/uploads/2023/04/Image-1.jpg",
+          description: "Pije klasike italiane me Aperol dhe prošek"
+        },
+        {
+          name: "Mai Tai",
+          price: "550 Lekë",
+          image: "https://assets-prd.punchdrink.com/wp-content/uploads/2023/04/17182206/Article-Bitter-Mai-Tai-Campari-Tiki-Cocktail-Recipe.jpg",
+          description: "Koktej tropikal me rum dhe fruta"
+        },
+        {
+          name: "Negroni",
+          price: "600 Lekë",
+          image: "https://www.wmn.de/wp-content/uploads/sites/2/2023/06/negroni-sbagliato.jpg",
+          description: "Koktej klasik italian me gin, vermouth të ëmbël dhe Campari"
+        },
+        {
+          name: "Margarita",
+          price: "550 Lekë",
+          image: "https://www.pingodoce.pt/wp-content/uploads/2016/08/comofazermargarita51.jpg",
+          description: "Koktej me tequila, liker portokalli dhe lime"
+        },
+        {
+          name: "Moito",
+          price: "550 Lekë",
+          image: "https://thehealthfulideas.com/wp-content/uploads/2022/08/Black-Mojito-SQUARE.jpg",
+          description: "Mojito e freskët me mentë, lime dhe rum"
+        },
+        {
+          name: "Vodka Sour Frut Pasioni",
+          price: "600 Lekë",
+          image: "https://tasterecipe.org/wp-content/uploads/2024/03/3-1-1024x618.webp",
+          description: "Vodka me fruta të passionit dhe shije të thartë"
+        },
+        {
+          name: "Uzo 12",
+          price: "300 Lekë",
+          image: "https://marcopoloalkohole.pl/wp-content/uploads/2022/12/IMG_1663-scaled.jpg",
+          description: "Pije tradicionale greke me anason"
+        },
+        {
+          name: "Gordons",
+          price: "250 Lekë",
+          image: "https://www.glengarrywines.co.nz/images/v10/brands/gordon's.png",
+          description: "Gin anglez i njohur botërisht"
+        },
+        {
+          name: "Tanqueray",
+          price: "400 Lekë",
+          image: "https://wallpapers.com/images/hd/tanqueray-gin-creative-photography-60r568jjyekmi059.jpg",
+          description: "Gin premium me botanikë të përzgjedhur"
+        },
+        {
+          name: "Bombay Sapphire",
+          price: "350 Lekë",
+          image: "http://www.flight-of-thought.ru/wp-content/uploads/2011/12/bombay-sapphire-gin.jpg",
+          description: "Gin me 10 botanikë të ndryshme"
+        },
+        {
+          name: "Hendrick's",
+          price: "500 Lekë",
+          image: "https://ginraiders.com/wp-content/uploads/2022/07/Hendricks-Midsummer-Solstice-Gin.jpg",
+          description: "Gin me trëndafil dhe kastravec"
+        },
+        {
+          name: "Campari",
+          price: "300 Lekë",
+          image: "https://www.admgroup.com/media/ohqgvcjz/campari_3.jpg",
+          description: "Aperitiv italian i hidhur dhe i ëmbël"
+        },
+        {
+          name: "Montenegro",
+          price: "350 Lekë",
+          image: "https://www.mashed.com/img/gallery/amaro-montenegro-what-is-it-and-how-do-you-drink-it/l-intro-1704331833.jpg",
+          description: "Amaro italian me 40 botanikë"
+        },
+        {
+          name: "J&B",
+          price: "350 Lekë",
+          image: "https://c.pxhere.com/photos/64/c5/whiskey_j_b_product_black_green_lifestyle-521617.jpg!d",
+          description: "Whisky skocez i përzier"
+        },
+        {
+          name: "Chivas Regal Extra",
+          price: "400 Lekë",
+          image: "https://bevvyco.s3.amazonaws.com/img/drinks/ey/dvey/9c240241335a6dd1a57416088df38a41-lg.jpg",
+          description: "Whisky skocez i rafinuar"
+        },
+        {
+          name: "Chivas Regal",
+          price: "400 Lekë",
+          image: "https://wallpapers.com/images/hd/chivas-regal-whisky-poster-xlqchcq3c4fblcrp.jpg",
+          description: "Whisky skocez 12 vjeçar"
+        },
+        {
+          name: "Bachardi 8 Anos",
+          price: "550 Lekë",
+          image: "https://d323g1xugy1rkz.cloudfront.net/wp-content/uploads/sites/25/2020/08/18121408/Hero-Product-Ocho-2.jpg",
+          description: "Rum i vjetëruar 8 vjet nga Bacardi"
+        },
+        {
+          name: "Metaxa 12 Anos",
+          price: "550 Lekë",
+          image: "https://bottle-brothers.de/wp-content/uploads/2023/06/2514_Product.jpg",
+          description: "Pije greke e vjetëruar 12 vjet"
+        },
+        {
+          name: "Hennesy",
+          price: "600 Lekë",
+          image: "https://www.staysnatched.com/wp-content/uploads/2022/11/hennessy-margarita-drink-recipe-6-1-897x1024.jpg.webp",
+          description: "Konjak francez i njohur botërisht"
+        },
+        {
+          name: "Woodford Reserve",
+          price: "550 Lekë",
+          image: "https://www.oaks.delivery/wp-content/uploads/woodford.jpg",
+          description: "Bourbon amerikane premium"
+        },
+        {
+          name: "Metaxa 5",
+          price: "400 Lekë",
+          image: "https://bottleraiders.com/wp-content/uploads/2024/07/Metaxa-5-Stars.jpg",
+          description: "Pije greke e vjetëruar 5 vjet"
+        },
+        {
+          name: "Tequila Patroni",
+          price: "300 Lekë",
+          image: "https://cdn.forbes.com.mx/2021/08/patron.jpg",
+          description: "Tequila premium nga Meksika"
+        },
+        {
+          name: "Jack Daniel",
+          price: "350 Lekë",
+          image: "https://www.bourbonbanter.com/content/images/2023/09/12-year-front-and-10-corked_hr-1.jpg",
+          description: "Whisky tennessee i njohur botërisht"
+        },
+        {
+          name: "Gentleman Jack",
+          price: "400 Lekë",
+          image: "https://media.sailthru.com/1gg/1k4/6/9/5edfcc1c5d440.jpg",
+          description: "Whisky tennessee i rafinuar dy herë"
+        },
+        {
+          name: "Johnnie Black",
+          price: "400 Lekë",
+          image: "http://static1.squarespace.com/static/61affa9c931dc960c27460a1/t/655d32364c29950c3bcb7cbe/1700606518711/JW+Black+12+front5.jpg?format=1500w",
+          description: "Whisky skocez 12 vjeçar"
+        },
+        {
+          name: "Red Label",
+          price: "350 Lekë",
+          image: "http://orig14.deviantart.net/d22d/f/2009/014/c/5/c589a5d952ade80112af188dab280163.jpg",
+          description: "Whisky skocez i përzier"
+        },
+        {
+          name: "Disaronno",
+          price: "350 Lekë",
+          image: "https://www.disaronno.com/wp-content/uploads/tradition-2001.jpg",
+          description: "Liker i ëmbël me bajame nga Italia"
+        },
+        {
+          name: "Fernet Branca",
+          price: "300 Lekë",
+          image: "https://www.wineenthusiast.com/wp-content/uploads/2023/05/02_23_What_Is_Fernet_HERO_Fernet_Branca_1920x1280.jpg",
+          description: "Amaro italian me shije të hidhura"
+        },
+        {
+          name: "Konjak Skenderbeu",
+          price: "120 Lekë",
+          image: "https://hotelberati.al/wp-content/uploads/2023/07/4e2d1817-bac4-4add-afef-27f7fdbae3fc-600x800.jpg",
+          description: "Konjak shqiptar me cilësi të lartë"
+        },
+        {
+          name: "Smirnoff",
+          price: "280 Lekë",
+          image: "https://cdn.shopify.com/s/files/1/0054/5157/9462/products/smifla_1024x1024@2x.jpg?v=1621545717",
+          description: "Vodka e njohur botërisht"
+        },
+        {
+          name: "Aperol",
+          price: "550 Lekë",
+          image: "https://cocktail-society.de/wp-content/uploads/2022/11/What-is-Aperol.jpg",
+          description: "Aperitiv italian portokalli i ëmbël"
+        },
+        {
+          name: "Vechia Romania",
+          price: "300 Lekë",
+          image: "https://m.media-amazon.com/images/S/aplus-media-library-service-media/70f7d500-e99d-4381-a52c-8460805acc97.__CR0,0,300,300_PT0_SX300_V1___.png",
+          description: "Liker rumun me shije tradicionale"
+        },
+        {
+          name: "Amaro del Capo",
+          price: "450 Lekë",
+          image: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=930&q=80",
+          description: "Amaro italian me 29 botanikë"
+        },
+        {
+          name: "Jagermaster",
+          price: "300 Lekë",
+          image: "https://drinkstack.com/wp-content/uploads/2022/03/jagermeister.jpg",
+          description: "Liker gjerman me 56 botanikë"
+        },
+        {
+          name: "Absolut Vodka",
+          price: "300 Lekë",
+          image: "http://3.bp.blogspot.com/-gLt2_BlztDc/TV-hQWQFIRI/AAAAAAAAJ0o/RXOyn7FAWN8/s1600/Absolut_Vodka_logo2.jpg",
+          description: "Vodka suedeze premium"
+        },
+        {
+          name: "Pushkini Kuq/I Zi",
+          price: "250 Lekë",
+          image: "https://btwalbania.com/wp-content/uploads/2023/09/PUSCHKIN%E2%80%8B_black.png",
+          description: "Verë ruse e njohur me cilësi të lartë"
+        }
+      ],
+      "brunch": [
+        {
+          name: "Omeletë me Perime",
+          price: "450 Lekë",
+          image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=872&q=80",
+          description: "Omeletë e bërë me vezë të freskëta dhe perime të zgjedhura"
+        },
+        {
+          name: "Pancake me Fruta",
+          price: "380 Lekë",
+          image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=780&q=80",
+          description: "Pancake të buta të serviruara me fruta të freskëta dhe shurup"
+        },
+        {
+          name: "Avocado Toast",
+          price: "400 Lekë",
+          image: "https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+          description: "Buka e pjekur me avokado, vezë dhe erëza"
+        },
+        {
+          name: "Sanduiç me Proshutë",
+          price: "480 Lekë",
+          image: "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+          description: "Sanduiç me proshutë të thatë, djathë dhe perime"
+        },
+        {
+          name: "Yogurt me Granola",
+          price: "320 Lekë",
+          image: "https://images.unsplash.com/photo-1533139502658-0198f920d8e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=942&q=80",
+          description: "Yogurt grek me granola dhe fruta të thata"
+        }
+      ],
+      "lunch": [
+        {
+          name: "Pasta Carbonara",
+          price: "550 Lekë",
+          image: "https://images.unsplash.com/photo-1588013273468-315fd88ea34c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=869&q=80",
+          description: "Pasta me salcë kremoze, proshutë dhe djathë parmesan"
+        },
+        {
+          name: "Burger Klasik",
+          price: "500 Lekë",
+          image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=999&q=80",
+          description: "Burger me mish viçi, djathë, salcë speciale dhe perime"
+        },
+        {
+          name: "Pizza Margarita",
+          price: "600 Lekë",
+          image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=781&q=80",
+          description: "Pizza me salcë domatesh, djathë mozzarella dhe vaj uthulli"
+        },
+        {
+          name: "Supa e Pules",
+          price: "350 Lekë",
+          image: "https://images.unsplash.com/photo-1603360946369-dc9bbd814b9d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+          description: "Supa tradicionale me pule, perime dhe erëza"
+        },
+        {
+          name: "Salatë Cezar",
+          price: "400 Lekë",
+          image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+          description: "Salatë me marule, pule, krutonë dhe salcë cezar"
+        },
+        {
+          name: "Sanduiç me Pule",
+          price: "450 Lekë",
+          image: "https://images.unsplash.com/photo-1606755962773-d324e7a7a7b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+          description: "Sanduiç me pule të skuqur, salcë dhe perime të freskëta"
+        }
+      ]
+    };
+    
+    // Konfigurimi i IntersectionObserver për animacionin e menu-item-eve
+    const itemObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          itemObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    // Funksioni për gjenerimin fillestar të menu-items në seksionet përkatëse
+    function generateMenuItems() {
+      Object.entries(menuItems).forEach(([category, items]) => {
+        const grid = document.querySelector(`#${category} .menu-grid`);
+        grid.innerHTML = "";
+        items.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "menu-item";
+          div.setAttribute("data-name", item.name.toLowerCase());
+          div.setAttribute("data-category", category);
+          div.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="item-image">
+            <div class="item-info">
+              <h3 class="item-title">${item.name}</h3>
+              <p class="item-description">${item.description}</p>
+              <p class="item-price">${item.price}</p>
+            </div>
+          `;
+          grid.appendChild(div);
+          itemObserver.observe(div);
+        });
+      });
+    }
+    
+    // Funksioni për ndërrimin e kategorive
+    function switchCategory(categoryId) {
+      // Hiq klasën active te të gjitha link-et
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      
+      // Shto klasën active nê link-un e zgjedhur
+      document.querySelector(`[data-category="${categoryId}"]`).classList.add("active");
+      
+      // Update nav title
+      updateNavTitle(categoryId);
+      
+      // Scroll to the section
+      const section = document.getElementById(categoryId);
+      if (section) {
+        const sectionTop = section.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({
+          top: sectionTop,
+          behavior: 'smooth'
+        });
+      }
+    }
+    
+    // Funksioni për update të titullit në navigation
+    function updateNavTitle(categoryId) {
+      const navTitle = document.querySelector('.current-section');
+      const sectionTitles = {
+        "kafe": "Kafe",
+        "pije-freskuese": "Pije Freskuese",
+        "pije-alkolike": "Pije Alkolike",
+        "brunch": "Brunch",
+        "lunch": "Lunch"
+      };
+      
+      if (navTitle && sectionTitles[categoryId]) {
+        navTitle.textContent = sectionTitles[categoryId];
+      }
+    }
+    
+    // Event listener për klikimet në navigacion
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        switchCategory(link.dataset.category);
+      });
+    });
+    
+    // Funksioni për progresin e scroll-it
+    function setupScrollProgress() {
+      const progressBar = document.querySelector('.progress-bar');
+      
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+        
+        const progress = (scrollTop / (docHeight - windowHeight)) * 100;
+        progressBar.style.width = `${progress}%`;
+      });
+    }
+    
+    // Funksioni për animacionin e titullit të seksionit
+    function animateSectionTitle(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      
+      const title = section.querySelector('.section-title');
+      if (title && !title.classList.contains('visible')) {
+        title.classList.add('visible');
+      }
+    }
+    
+    // Fixed section detection logic
+    function setupSectionObserver() {
+      const sections = Array.from(document.querySelectorAll('.menu-section'));
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      // Function to update active section
+      function updateActiveSection() {
+        let currentSectionId = null;
+        const scrollPosition = window.scrollY + 100; // Adding offset for the fixed header
+        
+        // Find which section is currently in view
+        for (const section of sections) {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            currentSectionId = section.id;
+            break;
+          }
+        }
+        
+        if (currentSectionId) {
+          // Update nav title
+          updateNavTitle(currentSectionId);
+          
+          // Update active link
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.category === currentSectionId) {
+              link.classList.add('active');
+            }
+          });
+          
+          // Animate the section title
+          animateSectionTitle(currentSectionId);
+        }
+      }
+      
+      // Initial update
+      updateActiveSection();
+      
+      // Update on scroll with throttling
+      let isUpdating = false;
+      window.addEventListener('scroll', () => {
+        if (!isUpdating) {
+          isUpdating = true;
+          requestAnimationFrame(() => {
+            updateActiveSection();
+            isUpdating = false;
+          });
+        }
+      });
+    }
+    
+    // Back to top button functionality
+    function setupBackToTop() {
+      const backToTop = document.querySelector('.back-to-top');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+    
+    // Search functionality
+    function setupSearch() {
+      const searchInput = document.getElementById('search-input');
+      const searchResults = document.getElementById('search-results');
+      
+      // Function to perform search
+      function performSearch() {
+        const query = searchInput.value.toLowerCase().trim();
+        
+        // Clear previous results
+        searchResults.innerHTML = '';
+        
+        // If query is empty, hide results and return
+        if (query === '') {
+          searchResults.classList.remove('active');
+          return;
+        }
+        
+        // Flatten all menu items for searching
+        const allItems = [];
+        Object.entries(menuItems).forEach(([category, items]) => {
+          items.forEach(item => {
+            allItems.push({
+              ...item,
+              category: category
+            });
+          });
+        });
+        
+        // Filter items based on query
+        const results = allItems.filter(item => 
+          item.name.toLowerCase().includes(query) || 
+          item.description.toLowerCase().includes(query)
+        );
+        
+        // Display results
+        if (results.length > 0) {
+          results.forEach(item => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'search-result-item';
+            resultItem.innerHTML = `
+              <img src="${item.image}" alt="${item.name}" class="search-result-image">
+              <div class="search-result-info">
+                <div class="search-result-name">${item.name}</div>
+                <div class="search-result-category">${getCategoryName(item.category)}</div>
+              </div>
+              <div class="search-result-price">${item.price}</div>
+            `;
+            
+            // Add click event to navigate to the item
+            resultItem.addEventListener('click', () => {
+              navigateToItem(item.name, item.category);
+              searchResults.classList.remove('active');
+              searchInput.value = '';
+            });
+            
+            searchResults.appendChild(resultItem);
+          });
+        } else {
+          // No results found
+          const noResults = document.createElement('div');
+          noResults.className = 'no-results';
+          noResults.textContent = 'Nuk u gjet asnjë rezultat.';
+          searchResults.appendChild(noResults);
+        }
+        
+        // Show results
+        searchResults.classList.add('active');
+      }
+      
+      // Helper function to get category display name
+      function getCategoryName(categoryId) {
+        const categoryNames = {
+          "kafe": "Kafe",
+          "pije-freskuese": "Pije Freskuese",
+          "pije-alkolike": "Pije Alkolike",
+          "brunch": "Brunch",
+          "lunch": "Lunch"
+        };
+        return categoryNames[categoryId] || categoryId;
+      }
+      
+      // Function to navigate to a specific item
+      function navigateToItem(itemName, category) {
+        // First switch to the category
+        switchCategory(category);
+        
+        // Wait a bit for the category to load, then find and highlight the item
+        setTimeout(() => {
+          const items = document.querySelectorAll(`#${category} .menu-item`);
+          const targetItem = Array.from(items).find(item => 
+            item.getAttribute('data-name') === itemName.toLowerCase()
+          );
+          
+          if (targetItem) {
+            // Scroll to the item
+            const itemPosition = targetItem.getBoundingClientRect().top + window.pageYOffset - 100;
+            window.scrollTo({
+              top: itemPosition,
+              behavior: 'smooth'
+            });
+            
+            // Highlight the item
+            targetItem.classList.add('highlighted');
+            
+            // Remove highlight after some time
+            setTimeout(() => {
+              targetItem.classList.remove('highlighted');
+            }, 2000);
+          }
+        }, 500);
+      }
+      
+      // Event listeners for search
+      searchInput.addEventListener('input', performSearch);
+      
+      // Close search results when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+          searchResults.classList.remove('active');
+        }
+      });
+      
+      // Prevent search results from closing when clicking inside them
+      searchResults.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+    
+    // Inicimi i menu-s kur DOM është gati
+    window.addEventListener("DOMContentLoaded", () => {
+      generateMenuItems();
+      setupScrollProgress();
+      setupSectionObserver();
+      setupBackToTop();
+      setupSearch();
+      
+      // Add current year to footer
+      const yearSpan = document.getElementById('current-year');
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
+    });
+  </script>
+</body>
+</html>
